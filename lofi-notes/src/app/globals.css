@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* src/app/globals.css */
+@import "tailwindcss/preflight";
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-grape-50 text-grape-900;
+}
+
