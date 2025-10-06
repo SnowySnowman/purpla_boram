@@ -21,6 +21,9 @@ export default function HomePage() {
   const [pin, setPin] = useState("");
   const [shareUrl, setShareUrl] = useState<string | null>(null);
 
+  const DIGITS_ONLY = /\D/g;
+  const isValidPin = (pin: string) => pin.length === 0 || /^\d{4,8}$/.test(pin);
+
   const createNote = useMutation({
     mutationFn: async (payload: CreatePayload) => {
       const res = await fetch("/api/note", {
@@ -62,13 +65,29 @@ export default function HomePage() {
             <span className="mb-1 font-medium pb-1 ml-0.5">Optional PIN (4–8 digits)</span>
             <input
               value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              inputMode="numeric"
-              pattern="\d*"
+              onChange={(e) => {
+                // keep digits only, clamp to 8
+                const cleaned = e.target.value.replace(DIGITS_ONLY, "").slice(0, 8);
+                setPin(cleaned);
+              }}
+              onPaste={(e) => {
+                // sanitise pasted text
+                const pasted = (e.clipboardData.getData("text") || "").replace(DIGITS_ONLY, "").slice(0, 8);
+                e.preventDefault();
+                setPin(pasted);
+              }}
+              inputMode="numeric"           // mobile numeric keypad
+              pattern="\d{4,8}"             // HTML hint (not relied upon)
+              maxLength={8}
               placeholder="e.g. 1234"
-              className="h-10 rounded-xl2 border border-grape-300 bg-white/80 px-3
-                        focus:outline-none focus:ring-2 focus:ring-grape-400 mt-3"
+              aria-invalid={!isValidPin(pin)}
+              className={`h-10 rounded-xl2 border px-3 bg-white/80 focus:outline-none mt-3
+                          focus:ring-2 ${isValidPin(pin) ? "border-grape-300 focus:ring-grape-400"
+                                                        : "border-red-400 focus:ring-red-400"}`}
             />
+            {!isValidPin(pin) && (
+              <p className="text-xs text-red-700">PIN must be 4–8 digits.</p>
+            )}
           </div>
 
           {/* Burn after read – stick to the TOP of its grid cell */}
@@ -82,17 +101,9 @@ export default function HomePage() {
         </div>
 
 
-
         <button
-          onClick={() =>
-            createNote.mutate({
-              content,
-              ttlSeconds: ttl,
-              burnAfterRead: burn,
-              pin: pin.trim() ? pin.trim() : undefined,
-            })
-          }
-          disabled={createNote.isPending}
+          onClick={() => createNote.mutate({ content, ttlSeconds: ttl, burnAfterRead: burn, pin: pin || undefined })}
+          disabled={createNote.isPending || !isValidPin(pin)}
           className="mt-4 rounded-xl2 bg-grape-600 px-4 py-2 text-white hover:bg-grape-700 disabled:opacity-50"
         >
           {createNote.isPending ? "Creating..." : "Create link"}

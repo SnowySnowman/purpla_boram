@@ -3,7 +3,7 @@ import "./globals.css";
 import Providers from "./providers";
 
 export const metadata = {
-  title: "Lofi Notes",
+  title: "Purpla",
   description: "Anonymous, temporary notes with share links",
 };
 
@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="min-h-screen">
             <header className="sticky top-0 z-10 border-b border-grape-200 bg-grape-50/80 backdrop-blur">
               <div className="mx-auto max-w-3xl px-4 py-3">
-                <h1 className="text-xl font-semibold">Lofi Notes</h1>
+                <h1 className="text-xl font-semibold">Purpla</h1>
               </div>
             </header>
             <main className="mx-auto max-w-3xl px-4 py-8">{children}</main>
