@@ -1,13 +1,11 @@
-// src/app/api/note/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { redis } from "@/lib/redis";
 import { NoteRecord } from "@/lib/schemas";
 import { hashPin } from "@/lib/hash";
 
-type Params = { params: { id: string } };
-
-export async function GET(req: NextRequest, { params }: Params) {
-  const id = params.id;
+// ✅ Note the awaited params
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   const key = `note:${id}`;
 
   const data = await redis.get<NoteRecord>(key);
@@ -15,7 +13,7 @@ export async function GET(req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "Not found or expired" }, { status: 404 });
   }
 
-  const ttl = await redis.ttl(key); // seconds remaining
+  const ttl = await redis.ttl(key);
 
   const pin = req.nextUrl.searchParams.get("pin") ?? undefined;
   if (data.pinHash) {
