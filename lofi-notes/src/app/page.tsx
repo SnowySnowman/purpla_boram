@@ -4,6 +4,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { ttlOptions } from "@/lib/schemas";
+import { PurpleSelect } from "@/components/PurpleSelect";
+import { PurpleCheckbox } from "@/components/PurpleCheckbox";
 
 type CreatePayload = {
   content: string;
@@ -44,41 +46,42 @@ export default function HomePage() {
         />
 
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <label className="flex flex-col text-sm">
-            <span className="mb-1 font-medium">Expiry</span>
-            <select
-              className="rounded-xl2 border border-grape-300 bg-white p-2"
-              value={ttl}
-              onChange={(e) => setTtl(Number(e.target.value))}
-            >
-              {ttlOptions.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </label>
-
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              className="h-4 w-4"
-              checked={burn}
-              onChange={(e) => setBurn(e.target.checked)}
+          {/* Expiry */}
+          <div className="space-y-3">
+            <span className="font-medium ml-0.5">Expiry</span>
+            <PurpleSelect
+              value={String(ttl)}
+              onValueChange={(v) => setTtl(Number(v))}
+              options={ttlOptions.map(o => ({ label: o.label, value: String(o.value) }))}
+              className="w-full h-10 mt-3"
             />
-            Burn after read
-          </label>
+          </div>
 
-          <label className="flex flex-col text-sm">
-            <span className="mb-1 font-medium">Optional PIN (4–8 digits)</span>
+          {/* PIN */}
+          <div className="space-y-1 ml-5">
+            <span className="mb-1 font-medium pb-1 ml-0.5">Optional PIN (4–8 digits)</span>
             <input
               value={pin}
               onChange={(e) => setPin(e.target.value)}
               inputMode="numeric"
               pattern="\d*"
               placeholder="e.g. 1234"
-              className="rounded-xl2 border border-grape-300 bg-white p-2"
+              className="h-10 rounded-xl2 border border-grape-300 bg-white/80 px-3
+                        focus:outline-none focus:ring-2 focus:ring-grape-400 mt-3"
             />
-          </label>
+          </div>
+
+          {/* Burn after read – stick to the TOP of its grid cell */}
+          <div className="place-self-center">
+            <PurpleCheckbox
+              checked={burn}
+              onCheckedChange={(v) => setBurn(v)}
+              label="Burn after read"
+            />
+          </div>
         </div>
+
+
 
         <button
           onClick={() =>

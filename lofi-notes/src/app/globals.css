@@ -1,14 +1,26 @@
 @import "tailwindcss";
 
-/* src/app/globals.css */
-@import "tailwindcss/preflight";
-@tailwind utilities;
+/* Tailwind v4: custom tokens via @theme */
+@theme {
+  /* lofi purple scale */
+  --color-grape-50:  #faf7ff;
+  --color-grape-100: #f4eeff;
+  --color-grape-200: #e7dcff;
+  --color-grape-300: #d1bdff;
+  --color-grape-400: #b497ff;
+  --color-grape-500: #9a7cf0;
+  --color-grape-600: #7a60cf;
+  --color-grape-700: #614ca9;
+  --color-grape-800: #4e3d88;
+  --color-grape-900: #3f316f;
 
-:root {
-  color-scheme: light;
+  /* extras */
+  --shadow-lofiglow: 0 10px 30px rgba(154,124,240,0.25);
+  --radius-xl2: 1rem;
 }
+
+:root { color-scheme: light; }
 
 body {
   @apply bg-grape-50 text-grape-900;
 }
-

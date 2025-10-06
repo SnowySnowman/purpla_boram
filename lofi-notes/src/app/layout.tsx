@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </header>
             <main className="mx-auto max-w-3xl px-4 py-8">{children}</main>
             <footer className="mx-auto max-w-3xl px-4 py-8 text-sm text-grape-700">
-              <p>Made with a lofi purple vibe.</p>
+              <p>Made by <a href="https://www.linkedin.com/in/minjung-shin-187565222/">Luna Shin</a></p>
             </footer>
           </div>
         </Providers>

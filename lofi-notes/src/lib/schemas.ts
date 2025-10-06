@@ -2,6 +2,8 @@
 import { z } from "zod";
 
 export const ttlOptions = [
+  { label: "1 minute", value: 60},
+  { label: "5 minutes", value: 5 * 60},
   { label: "15 minutes", value: 15 * 60 },
   { label: "1 hour", value: 60 * 60 },
   { label: "1 day", value: 24 * 60 * 60 },
